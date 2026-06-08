@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Clock, Calendar, Star, ExternalLink, Play, Ticket, Tv, Globe } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Star, ExternalLink, Play, Ticket, Tv, Globe, VolumeX, Volume2 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { MovieCard, MovieCardSkeleton } from "@/components/MovieCard";
 import { fetchMovieDetails, getReleaseInfo, img, type Provider } from "@/lib/tmdb";
+import { useState, useRef } from "react";
 
 export const Route = createFileRoute("/movie/$id")({
   component: MovieDetailsPage,
@@ -11,6 +12,9 @@ export const Route = createFileRoute("/movie/$id")({
 
 function MovieDetailsPage() {
   const { id } = useParams({ from: "/movie/$id" });
+  const [isMuted, setIsMuted] = useState(true);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  
   const { data, isLoading, error } = useQuery({
     queryKey: ["movie", id],
     queryFn: () => fetchMovieDetails(id),
@@ -34,17 +38,17 @@ function MovieDetailsPage() {
   const poster = img(data.poster_path, "w500");
   const release = getReleaseInfo(data, "IN");
   const providers = data["watch/providers"]?.results?.["IN"] || data["watch/providers"]?.results?.["US"];
-  const director = data.credits?.crew.find((c) => c.job === "Director");
+  const director = data.credits?.crew?.find((c) => c.job === "Director");
   const trailer =
-    data.videos?.results.find((v) => v.site === "YouTube" && v.type === "Trailer") ||
-    data.videos?.results.find((v) => v.site === "YouTube");
+    data.videos?.results?.find((v) => v.site === "YouTube" && v.type === "Trailer") ||
+    data.videos?.results?.find((v) => v.site === "YouTube");
   const year = data.release_date?.slice(0, 4);
   const runtime = data.runtime ? `${Math.floor(data.runtime / 60)}h ${data.runtime % 60}m` : null;
   const imdbId = data.external_ids?.imdb_id || data.imdb_id;
 
-  const bmsQuery = encodeURIComponent(data.title);
+  const bmsQuery = encodeURIComponent(data.title || "");
   const watchLinks = buildWatchLinks({
-    title: data.title,
+    title: data.title || "",
     providers,
     tmdbWatchLink: data["watch/providers"]?.results?.["IN"]?.link,
     hasTheatrical: release.hasTheatrical,
@@ -54,6 +58,20 @@ function MovieDetailsPage() {
     bmsQuery,
   });
 
+  const toggleMute = () => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({
+          event: "command",
+          func: isMuted ? "unMute" : "mute",
+          args: [],
+        }),
+        "*"
+      );
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -61,16 +79,26 @@ function MovieDetailsPage() {
       {/* Backdrop */}
       <div className="relative h-[70vh] min-h-[500px] w-full overflow-hidden bg-background">
         {trailer ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${trailer.key}&modestbranding=1&playsinline=1`}
-            allow="autoplay; encrypted-media"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[70vh] min-w-[125vh] pointer-events-none opacity-80 animate-fade-up scale-[1.35]"
-          />
+          <>
+            <iframe
+              ref={iframeRef}
+              src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${trailer.key}&modestbranding=1&playsinline=1&enablejsapi=1`}
+              allow="autoplay; encrypted-media"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[70vh] min-w-[125vh] pointer-events-none animate-fade-up scale-[1.35]"
+            />
+            <button
+              onClick={toggleMute}
+              className="absolute bottom-6 right-6 z-10 p-3 rounded-full bg-background/50 backdrop-blur-md border border-border/50 text-foreground hover:bg-background/80 transition-colors"
+              aria-label={isMuted ? "Unmute trailer" : "Mute trailer"}
+            >
+              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
+          </>
         ) : backdrop ? (
           <img src={backdrop} alt="" className="h-full w-full object-cover scale-105 animate-fade-up" />
         ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent pointer-events-none" />
       </div>
 
       <div className="relative -mt-72 px-6 sm:px-10 pb-20">
