@@ -59,12 +59,18 @@ function MovieDetailsPage() {
       <Header />
 
       {/* Backdrop */}
-      <div className="relative h-[70vh] min-h-[500px] w-full overflow-hidden">
-        {backdrop && (
+      <div className="relative h-[70vh] min-h-[500px] w-full overflow-hidden bg-background">
+        {trailer ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${trailer.key}&modestbranding=1&playsinline=1`}
+            allow="autoplay; encrypted-media"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[70vh] min-w-[125vh] pointer-events-none opacity-80 animate-fade-up scale-[1.35]"
+          />
+        ) : backdrop ? (
           <img src={backdrop} alt="" className="h-full w-full object-cover scale-105 animate-fade-up" />
-        )}
+        ) : null}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
       </div>
 
       <div className="relative -mt-72 px-6 sm:px-10 pb-20">
