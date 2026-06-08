@@ -1,13 +1,16 @@
 import { type Movie, img } from "@/lib/tmdb";
 import { Star } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function MovieCard({ movie, index = 0 }: { movie: Movie; index?: number }) {
   const poster = img(movie.poster_path, "w500");
   const year = movie.release_date?.slice(0, 4);
 
   return (
-    <div
-      className="group relative w-[180px] sm:w-[200px] shrink-0 cursor-pointer animate-fade-up"
+    <Link
+      to="/movie/$id"
+      params={{ id: String(movie.id) }}
+      className="group relative block w-[180px] sm:w-[200px] shrink-0 cursor-pointer animate-fade-up"
       style={{ animationDelay: `${Math.min(index * 40, 400)}ms` }}
     >
       <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-secondary shadow-[var(--shadow-card)] ring-1 ring-border/50 transition-all duration-500 ease-out group-hover:ring-primary/50 group-hover:-translate-y-2 group-hover:shadow-[var(--shadow-gold)]">
@@ -46,7 +49,7 @@ export function MovieCard({ movie, index = 0 }: { movie: Movie; index?: number }
         </h3>
         {year && <p className="mt-0.5 text-xs text-muted-foreground">{year}</p>}
       </div>
-    </div>
+    </Link>
   );
 }
 
