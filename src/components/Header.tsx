@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Film } from "lucide-react";
+import { Film, Github } from "lucide-react";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -28,12 +28,32 @@ export function Header() {
           </span>
         </a>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-          <a href="#new" className="transition-colors hover:text-foreground">New</a>
-          <a href="#ott" className="transition-colors hover:text-foreground">OTT</a>
-          <a href="#future" className="transition-colors hover:text-foreground">Upcoming</a>
-          <a href="#genres" className="transition-colors hover:text-foreground">Genres</a>
-        </nav>
+        <div className="flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="#new" className="text-primary transition-colors hover:text-primary/80">
+              New
+            </a>
+            <a href="#ott" className="text-primary transition-colors hover:text-primary/80">
+              OTT
+            </a>
+            <a href="#future" className="text-primary transition-colors hover:text-primary/80">
+              Upcoming
+            </a>
+            <a href="#genres" className="text-primary transition-colors hover:text-primary/80">
+              Genres
+            </a>
+          </nav>
+
+          <a
+            href="https://github.com/forzayt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary transition-colors hover:text-primary/80"
+            aria-label="GitHub"
+          >
+            <Github className="h-5 w-5" />
+          </a>
+        </div>
       </div>
     </header>
   );
