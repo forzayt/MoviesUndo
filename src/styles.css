@@ -174,25 +174,46 @@
     background-clip: text;
     color: transparent;
   }
-  .scrollbar-hide::-webkit-scrollbar { display: none; }
-  .scrollbar-hide { scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
   .mask-fade-r {
     mask-image: linear-gradient(to right, black 85%, transparent);
   }
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
-.animate-fade-up { animation: fade-up 0.6s ease-out both; }
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
 .skeleton {
-  background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-muted) 50%, var(--color-secondary) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 0%,
+    var(--color-muted) 50%,
+    var(--color-secondary) 100%
+  );
   background-size: 1000px 100%;
   animation: shimmer 2s infinite linear;
 }

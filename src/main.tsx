@@ -1,10 +1,16 @@
-import { createRoot } from 'react-dom/client'
-import { RouterProvider } from '@tanstack/react-router'
-import { router } from './router'
-import './styles.css'
+import { createRoot } from "react-dom/client";
+import { RouterProvider } from "@tanstack/react-router";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { router } from "./router";
+import "./styles.css";
 
-const rootElement = document.getElementById('root')!
+const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
-  const root = createRoot(rootElement)
-  root.render(<RouterProvider router={router} />)
+  const root = createRoot(rootElement);
+  root.render(
+    <>
+      <RouterProvider router={router} />
+      <SpeedInsights />
+    </>,
+  );
 }
