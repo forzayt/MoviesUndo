@@ -8,7 +8,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "MoviesUndo — Malayalam Cinema, Curated" },
-      { name: "description", content: "Discover the latest Malayalam movies, OTT premieres, and upcoming releases — a beautifully crafted cinema catalog." },
+      {
+        name: "description",
+        content:
+          "Discover the latest Malayalam movies, OTT premieres, and upcoming releases — a beautifully crafted cinema catalog.",
+      },
       { property: "og:title", content: "MoviesUndo" },
       { property: "og:description", content: "Malayalam cinema, curated." },
     ],
@@ -73,9 +77,7 @@ function Index() {
           <p className="font-display text-2xl">
             Movies<span className="text-gradient-gold">Undo</span>
           </p>
-          <p className="text-xs text-muted-foreground">
-            Powered by TMDB · Data refreshes daily
-          </p>
+          <p className="text-xs text-muted-foreground">Powered by TMDB · Data refreshes daily</p>
         </div>
       </footer>
     </div>

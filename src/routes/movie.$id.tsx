@@ -1,6 +1,18 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Clock, Calendar, Star, ExternalLink, Play, Ticket, Tv, Globe, VolumeX, Volume2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Calendar,
+  Star,
+  ExternalLink,
+  Play,
+  Ticket,
+  Tv,
+  Globe,
+  VolumeX,
+  Volume2,
+} from "lucide-react";
 import { Header } from "@/components/Header";
 import { MovieCard, MovieCardSkeleton } from "@/components/MovieCard";
 import { fetchMovieDetails, getReleaseInfo, img, type Provider } from "@/lib/tmdb";
@@ -14,7 +26,7 @@ function MovieDetailsPage() {
   const { id } = useParams({ from: "/movie/$id" });
   const [isMuted, setIsMuted] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["movie", id],
     queryFn: () => fetchMovieDetails(id),
@@ -28,7 +40,9 @@ function MovieDetailsPage() {
         <Header />
         <div className="pt-32 px-6 sm:px-10">
           <p className="text-muted-foreground">Couldn't load this movie.</p>
-          <Link to="/" className="mt-4 inline-block text-primary hover:underline">Back home</Link>
+          <Link to="/" className="mt-4 inline-block text-primary hover:underline">
+            Back home
+          </Link>
         </div>
       </div>
     );
@@ -37,7 +51,8 @@ function MovieDetailsPage() {
   const backdrop = img(data.backdrop_path, "original");
   const poster = img(data.poster_path, "w500");
   const release = getReleaseInfo(data, "IN");
-  const providers = data["watch/providers"]?.results?.["IN"] || data["watch/providers"]?.results?.["US"];
+  const providers =
+    data["watch/providers"]?.results?.["IN"] || data["watch/providers"]?.results?.["US"];
   const director = data.credits?.crew?.find((c) => c.job === "Director");
   const trailer =
     data.videos?.results?.find((v) => v.site === "YouTube" && v.type === "Trailer") ||
@@ -66,7 +81,7 @@ function MovieDetailsPage() {
           func: isMuted ? "unMute" : "mute",
           args: [],
         }),
-        "*"
+        "*",
       );
       setIsMuted(!isMuted);
     }
@@ -95,7 +110,11 @@ function MovieDetailsPage() {
             </button>
           </>
         ) : backdrop ? (
-          <img src={backdrop} alt="" className="h-full w-full object-cover scale-105 animate-fade-up" />
+          <img
+            src={backdrop}
+            alt=""
+            className="h-full w-full object-cover scale-105 animate-fade-up"
+          />
         ) : null}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/30 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent pointer-events-none" />
@@ -126,7 +145,9 @@ function MovieDetailsPage() {
           {/* Info */}
           <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
             {data.tagline && (
-              <p className="text-xs uppercase tracking-[0.2em] text-primary/80 mb-3">{data.tagline}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-primary/80 mb-3">
+                {data.tagline}
+              </p>
             )}
             <h1 className="font-display text-5xl sm:text-6xl text-foreground leading-[1.05]">
               {data.title}
@@ -255,7 +276,12 @@ function MovieDetailsPage() {
                 <div key={c.id} className="w-[120px] shrink-0 text-center">
                   <div className="aspect-square overflow-hidden rounded-full bg-secondary ring-1 ring-border/50">
                     {c.profile_path ? (
-                      <img src={img(c.profile_path, "w300") || ""} alt={c.name} className="h-full w-full object-cover" loading="lazy" />
+                      <img
+                        src={img(c.profile_path, "w300") || ""}
+                        alt={c.name}
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
                     ) : (
                       <div className="h-full w-full bg-secondary" />
                     )}
@@ -317,7 +343,11 @@ function ProviderList({ label, items }: { label: string; items?: Provider[] }) {
             className="flex items-center gap-2 rounded-xl border border-border bg-card/60 px-3 py-2 text-sm"
           >
             {p.logo_path && (
-              <img src={img(p.logo_path, "w300") || ""} alt={p.provider_name} className="h-7 w-7 rounded-md object-cover" />
+              <img
+                src={img(p.logo_path, "w300") || ""}
+                alt={p.provider_name}
+                className="h-7 w-7 rounded-md object-cover"
+              />
             )}
             <span className="text-foreground/90">{p.provider_name}</span>
           </div>
@@ -340,7 +370,11 @@ function buildWatchLinks(opts: {
   const links: { label: string; href: string; icon: React.ReactNode }[] = [];
 
   if (opts.tmdbWatchLink) {
-    links.push({ label: "All Streaming Options", href: opts.tmdbWatchLink, icon: <Tv className="h-4 w-4" /> });
+    links.push({
+      label: "All Streaming Options",
+      href: opts.tmdbWatchLink,
+      icon: <Tv className="h-4 w-4" />,
+    });
   }
 
   if (opts.hasTheatrical) {
@@ -360,7 +394,11 @@ function buildWatchLinks(opts: {
   }
 
   if (opts.homepage) {
-    links.push({ label: "Official Site", href: opts.homepage, icon: <Globe className="h-4 w-4" /> });
+    links.push({
+      label: "Official Site",
+      href: opts.homepage,
+      icon: <Globe className="h-4 w-4" />,
+    });
   }
 
   return links;

@@ -28,7 +28,7 @@ export function MovieRow({ title, subtitle, catalog, queryKey }: Props) {
           }
         });
       },
-      { rootMargin: "300px 0px" }
+      { rootMargin: "300px 0px" },
     );
     obs.observe(el);
     return () => obs.disconnect();
